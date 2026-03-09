@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+@import "tailwindcss";
+
+/* Dit Magi Font - loaded via @font-face */
+@font-face {
+  font-family: 'DitMagi';
+  src: url('/fonts/Dit-Magi-Demo-BF66c2bf0ae15dd.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-display: 'DitMagi', 'Cormorant Garamond', serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+
+  /* Brand Colors */
+  --color-obsidian: #0a0a0a;
+  --color-ivory: #f5f0e8;
+  --color-gold: #c9a84c;
+  --color-gold-light: #e8c97a;
+  --color-platinum: #e5e4e2;
+  --color-smoke: #1a1a1a;
+  --color-mist: #2a2a2a;
+
+  /* Spacing rhythm */
+  --section-padding: clamp(4rem, 10vw, 10rem);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-obsidian);
+  color: var(--color-ivory);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-obsidian);
+}
+
+/* Utility classes */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.bg-obsidian {
+  background-color: var(--color-obsidian);
+}
+
+/* Gold shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-gold) 0%,
+    var(--color-gold-light) 40%,
+    var(--color-gold) 60%,
+    var(--color-gold-light) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+
+/* DayPicker custom styling to match AERO theme */
+.booking-calendar .rdp {
+  --rdp-cell-size: 36px;
+  --rdp-accent-color: #c9a84c;
+  --rdp-background-color: rgba(201, 168, 76, 0.1);
+  --rdp-outline: 2px solid #c9a84c;
+  --rdp-outline-selected: 2px solid #c9a84c;
+  margin: 0;
+}
+
+.booking-calendar .rdp-months {
+  justify-content: center;
+}
+
+.booking-calendar .rdp-month {
+  background: transparent;
+}
+
+.booking-calendar .rdp-caption {
+  padding: 0 0 8px 0;
+}
+
+.booking-calendar .rdp-caption_label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: #f5f0e8;
+  letter-spacing: 0.1em;
+}
+
+.booking-calendar .rdp-nav_button {
+  color: rgba(245, 240, 232, 0.4);
+}
+
+.booking-calendar .rdp-nav_button:hover {
+  color: #c9a84c;
+  background: transparent;
+}
+
+.booking-calendar .rdp-head_cell {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(245, 240, 232, 0.2);
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+.booking-calendar .rdp-day {
+  font-family: var(--font-body);
+  color: rgba(245, 240, 232, 0.6);
+  border-radius: 0 !important;
+}
+
+.booking-calendar .rdp-day:hover:not(.rdp-day_disabled):not(.rdp-day_selected) {
+  background: rgba(201, 168, 76, 0.1);
+  color: #c9a84c;
+}
+
+.booking-calendar .rdp-day_selected {
+  background: #c9a84c !important;
+  color: #0a0a0a !important;
+  font-weight: 600;
+}
+
+.booking-calendar .rdp-day_today:not(.rdp-day_selected) {
+  color: #c9a84c;
+  font-weight: 600;
+}
+
+.booking-calendar .rdp-day_disabled {
+  color: rgba(245, 240, 232, 0.1) !important;
+}
