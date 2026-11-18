@@ -48,7 +48,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.supabase.co https://img.clerk.com https://*.clerk.com",
-      "connect-src 'self' https://*.supabase.co https://*.clerk.com https://api.clerk.dev wss://*.supabase.co https://*.upstash.io",
+      "connect-src 'self' https://*.supabase.co https://*.clerk.com https://*.clerk.accounts.dev https://api.clerk.dev wss://*.supabase.co https://*.upstash.io",
       "frame-src 'self' https://clerk.com https://*.clerk.accounts.dev https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
