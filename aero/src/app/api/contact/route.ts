@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { rateLimiter, getClientIP } from '@/lib/rate-limit'
+import { createRateLimiter, getClientIP } from '@/lib/rate-limit'
 import { sanitizeInput, isValidEmail } from '@/lib/utils'
 import { z } from 'zod'
+
+// Stricter for the contact form: 20 per hour per IP
+const contactLimiter = createRateLimiter(20, 'aero:contact')
 
 const ContactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -15,16 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     // Rate limit — stricter for contact (20/hour)
     const ip = getClientIP(request)
-    const rateLimit = new (await import('@upstash/ratelimit')).Ratelimit({
-      redis: new (await import('@upstash/redis')).Redis({
-        url: process.env.UPSTASH_REDIS_REST_URL!,
-        token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-      }),
-      limiter: (await import('@upstash/ratelimit')).Ratelimit.slidingWindow(20, '1 h'),
-      prefix: 'aero:contact',
-    })
-
-    const { success } = await rateLimit.limit(ip)
+    const { success } = await contactLimiter.limit(ip)
     if (!success) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
