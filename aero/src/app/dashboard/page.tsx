@@ -1,14 +1,11 @@
-import { currentUser } from '@clerk/nextjs/server'
 import DashboardOverview from '@/components/sections/dashboard/DashboardOverview'
 
-export default async function DashboardPage() {
-  const user = await currentUser()
-
+export default function DashboardPage() {
   return (
     <DashboardOverview
-      userName={user?.firstName ?? 'Member'}
-      userEmail={user?.emailAddresses[0]?.emailAddress ?? ''}
-      memberSince={user?.createdAt ? new Date(user.createdAt).getFullYear().toString() : '2025'}
+      userName="Your Flights"
+      userEmail="Bookings are saved in this browser"
+      memberSince={new Date().getFullYear().toString()}
     />
   )
 }

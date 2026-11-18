@@ -138,14 +138,14 @@ export default function DashboardOverview({ userName, userEmail, memberSince }: 
         </Link>
 
         <Link
-          href="/dashboard/settings"
+          href="/booking"
           className="flex items-center justify-between p-5 border border-ivory/10 bg-smoke text-ivory hover:border-gold/30 transition-colors duration-300 group"
         >
           <div>
             <p className="text-ivory/30 font-body text-xs tracking-[0.2em] uppercase mb-1">
-              Account
+              Charter
             </p>
-            <p className="font-display text-xl">Settings</p>
+            <p className="font-display text-xl">Book a Flight</p>
           </div>
           <ArrowRight
             size={16}

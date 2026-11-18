@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Link from 'next/link'
-import { useUser, useAuth, UserButton } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { LayoutDashboard } from 'lucide-react'
 
@@ -17,8 +16,6 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const { user } = useUser()
-  const { isSignedIn } = useAuth()
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -60,76 +57,20 @@ export default function Navbar() {
 
         {/* Auth area — desktop */}
         <div className="hidden sm:flex items-center gap-4">
-          {!isSignedIn ? (
-            <>
-              <Link
-                href="/sign-in"
-                className="text-ivory/60 hover:text-gold font-body tracking-[0.15em] text-sm uppercase transition-colors duration-300"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/booking"
-                className="px-6 py-2.5 bg-gold text-obsidian font-body tracking-[0.15em] text-sm uppercase hover:bg-gold-light transition-colors duration-300"
-              >
-                Book Now
-              </Link>
-            </>
-          ) : (
-            <>
-              <span className="text-ivory/30 font-body text-sm">
-                {user?.firstName ?? 'Welcome back'}
-              </span>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 text-ivory/50 hover:text-gold font-body tracking-[0.15em] text-xs uppercase transition-colors duration-300"
+          >
+            <LayoutDashboard size={13} />
+            Dashboard
+          </Link>
 
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2 text-ivory/50 hover:text-gold font-body tracking-[0.15em] text-xs uppercase transition-colors duration-300"
-              >
-                <LayoutDashboard size={13} />
-                Dashboard
-              </Link>
-
-              <Link
-                href="/booking"
-                className="px-6 py-2.5 bg-gold text-obsidian font-body tracking-[0.15em] text-sm uppercase hover:bg-gold-light transition-colors duration-300"
-              >
-                Book Now
-              </Link>
-
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: {
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '0px',
-                      border: '1px solid rgba(201,168,76,0.3)',
-                    },
-                    userButtonPopoverCard: {
-                      backgroundColor: '#1a1a1a',
-                      border: '1px solid rgba(245,240,232,0.08)',
-                      borderRadius: '0px',
-                      boxShadow: 'none',
-                    },
-                    userButtonPopoverActionButton: {
-                      color: 'rgba(245,240,232,0.6)',
-                      fontFamily: '"Cormorant Garamond", Georgia, serif',
-                    },
-                    userButtonPopoverActionButtonText: {
-                      fontFamily: '"Cormorant Garamond", Georgia, serif',
-                    },
-                    userPreviewMainIdentifier: {
-                      color: '#f5f0e8',
-                      fontFamily: '"Cormorant Garamond", Georgia, serif',
-                    },
-                    userPreviewSecondaryIdentifier: {
-                      color: 'rgba(245,240,232,0.4)',
-                    },
-                  },
-                }}
-              />
-            </>
-          )}
+          <Link
+            href="/booking"
+            className="px-6 py-2.5 bg-gold text-obsidian font-body tracking-[0.15em] text-sm uppercase hover:bg-gold-light transition-colors duration-300"
+          >
+            Book Now
+          </Link>
         </div>
 
         {/* Mobile menu toggle */}
@@ -191,44 +132,20 @@ export default function Navbar() {
             transition={{ delay: 0.5 }}
             className="flex flex-col items-center gap-4"
           >
-            {!isSignedIn ? (
-              <>
-                <Link
-                  href="/sign-in"
-                  className="text-ivory/50 font-body tracking-[0.2em] text-sm uppercase"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/booking"
-                  className="px-8 py-3 bg-gold text-obsidian font-body tracking-[0.2em] text-sm uppercase"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Book Now
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-ivory/50 font-body tracking-[0.2em] text-sm uppercase"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/booking"
-                  className="px-8 py-3 bg-gold text-obsidian font-body tracking-[0.2em] text-sm uppercase"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Book Now
-                </Link>
-                <div className="mt-2">
-                  <UserButton />
-                </div>
-              </>
-            )}
+            <Link
+              href="/dashboard"
+              className="text-ivory/50 font-body tracking-[0.2em] text-sm uppercase"
+              onClick={() => setMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/booking"
+              className="px-8 py-3 bg-gold text-obsidian font-body tracking-[0.2em] text-sm uppercase"
+              onClick={() => setMenuOpen(false)}
+            >
+              Book Now
+            </Link>
           </motion.li>
         </ul>
       </motion.div>
