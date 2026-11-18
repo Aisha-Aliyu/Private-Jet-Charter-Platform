@@ -3,58 +3,14 @@
 import { motion } from 'framer-motion'
 import { formatCurrency } from '@/lib/utils'
 import Link from 'next/link'
+import { useBookings } from '@/hooks/useBookings'
 import { Plane, Clock, MapPin, ArrowRight, Plus } from 'lucide-react'
 
-const ALL_BOOKINGS = [
-  {
-    id: 'BK-001',
-    route: 'New York → Dubai',
-    departure: 'KTEB',
-    arrival: 'OMDB',
-    date: 'Mar 22, 2025',
-    returnDate: null,
-    aircraft: 'Gulfstream G650',
-    passengers: 4,
-    status: 'confirmed',
-    amount: 87500,
-  },
-  {
-    id: 'BK-002',
-    route: 'London → Paris',
-    departure: 'EGLC',
-    arrival: 'LFPB',
-    date: 'Feb 14, 2025',
-    returnDate: null,
-    aircraft: 'Citation CJ4',
-    passengers: 2,
-    status: 'completed',
-    amount: 6200,
-  },
-  {
-    id: 'BK-003',
-    route: 'Lagos → London',
-    departure: 'DNMM',
-    arrival: 'EGLL',
-    date: 'Jan 30, 2025',
-    returnDate: 'Feb 5, 2025',
-    aircraft: 'Challenger 350',
-    passengers: 6,
-    status: 'completed',
-    amount: 42000,
-  },
-  {
-    id: 'BK-004',
-    route: 'Dubai → Singapore',
-    departure: 'OMDB',
-    arrival: 'WSSS',
-    date: 'Dec 18, 2024',
-    returnDate: null,
-    aircraft: 'Hawker 900XP',
-    passengers: 3,
-    status: 'completed',
-    amount: 28400,
-  },
-]
+// 'yyyy-MM-dd' to 'Mar 22, 2025'
+const formatDate = (date: string) =>
+  date
+    ? new Date(`${date}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : ''
 
 const STATUS_STYLES: Record<string, string> = {
   confirmed: 'bg-gold/10 text-gold border border-gold/20',
@@ -64,6 +20,20 @@ const STATUS_STYLES: Record<string, string> = {
 }
 
 export default function BookingsPage() {
+  const { bookings } = useBookings()
+  const ALL_BOOKINGS = bookings.map((b) => ({
+    id: b.booking_reference,
+    route: `${b.departure_city} → ${b.arrival_city}`,
+    departure: b.departure_airport,
+    arrival: b.arrival_airport,
+    date: formatDate(b.departure_date),
+    returnDate: b.return_date ? formatDate(b.return_date) : null,
+    aircraft: b.jet_name,
+    passengers: b.passengers,
+    status: b.status,
+    amount: b.total_price,
+  }))
+
   return (
     <div className="px-6 py-10 max-w-5xl">
       {/* Header */}

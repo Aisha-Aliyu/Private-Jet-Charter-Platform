@@ -4,12 +4,10 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { UserButton } from '@clerk/nextjs'
 import {
   LayoutDashboard,
   Plane,
   CalendarDays,
-  Settings,
   Map,
   ChevronRight,
 } from 'lucide-react'
@@ -20,7 +18,6 @@ const NAV = [
   { label: 'My Bookings', href: '/dashboard/bookings', icon: CalendarDays },
   { label: 'Fleet', href: '/fleet', icon: Plane },
   { label: 'Destinations', href: '/destinations', icon: Map },
-  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
 export default function DashboardSidebar() {
@@ -88,31 +85,6 @@ export default function DashboardSidebar() {
             )
           })}
         </nav>
-
-        {/* User area */}
-        <div className="p-4 border-t border-ivory/5 flex items-center gap-3">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: {
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '0px',
-                  border: '1px solid rgba(201,168,76,0.3)',
-                },
-              },
-            }}
-          />
-          {!collapsed && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="min-w-0"
-            >
-              <p className="text-ivory/50 font-body text-xs truncate">Member Account</p>
-            </motion.div>
-          )}
-        </div>
       </motion.aside>
 
       {/* Mobile top bar */}

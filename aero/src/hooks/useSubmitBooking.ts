@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { BookingFormData } from '@/types'
 import { format } from 'date-fns'
+import { makeBookingReference, saveBooking } from '@/lib/local-bookings'
 
 interface SubmitResult {
   success: boolean
@@ -10,6 +11,7 @@ interface SubmitResult {
   error?: string
 }
 
+// Saves the booking in this browser
 export function useSubmitBooking() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -19,47 +21,35 @@ export function useSubmitBooking() {
     setError(null)
 
     try {
-      const payload = {
-        departureAirport: form.departureAirport,
-        departureCity: form.departureCity,
-        arrivalAirport: form.arrivalAirport,
-        arrivalCity: form.arrivalCity,
-        tripType: form.tripType,
-        departureDate: form.departureDate
-          ? format(form.departureDate, 'yyyy-MM-dd')
-          : null,
-        returnDate: form.returnDate
-          ? format(form.returnDate, 'yyyy-MM-dd')
-          : null,
-        jetId: form.jetId,
-        jetName: form.jetName,
-        jetCategory: form.jetCategory,
-        pricePerHour: form.pricePerHour,
+      const now = new Date().toISOString()
+      const bookingReference = makeBookingReference()
+      saveBooking({
+        id: crypto.randomUUID(),
+        user_name: `${form.firstName} ${form.lastName}`.trim(),
+        user_email: form.email,
+        departure_airport: form.departureAirport,
+        departure_city: form.departureCity,
+        arrival_airport: form.arrivalAirport,
+        arrival_city: form.arrivalCity,
+        trip_type: form.tripType,
+        departure_date: form.departureDate ? format(form.departureDate, 'yyyy-MM-dd') : '',
+        return_date: form.returnDate ? format(form.returnDate, 'yyyy-MM-dd') : null,
+        jet_id: form.jetId,
+        jet_name: form.jetName,
+        jet_category: form.jetCategory,
+        price_per_hour: form.pricePerHour,
         passengers: form.passengers,
-        estimatedHours: form.estimatedHours,
-        totalPrice: form.totalPrice,
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        phone: form.phone,
-        specialRequests: form.specialRequests,
-      }
-
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        estimated_hours: form.estimatedHours,
+        total_price: form.totalPrice,
+        status: 'pending',
+        special_requests: form.specialRequests || null,
+        booking_reference: bookingReference,
+        created_at: now,
+        updated_at: now,
       })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error ?? 'Booking failed')
-      }
-
-      return { success: true, bookingReference: data.bookingReference }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error'
+      return { success: true, bookingReference }
+    } catch {
+      const message = "Couldn't save the booking in this browser."
       setError(message)
       return { success: false, error: message }
     } finally {

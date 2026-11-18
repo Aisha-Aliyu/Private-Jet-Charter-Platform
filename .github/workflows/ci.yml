@@ -16,14 +16,6 @@ jobs:
       run:
         working-directory: aero
     env:
-      # Placeholders so the build can run here. The real values live in Vercel.
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZXhhbXBsZS5jbGVyay5hY2NvdW50cy5kZXYk
-      CLERK_SECRET_KEY: sk_test_placeholder
-      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
-      SUPABASE_SERVICE_ROLE_KEY: placeholder
-      # No Upstash settings on purpose: the site must build without them
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v4

@@ -1,49 +1,28 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { DbBooking } from '@/lib/supabase'
+import { readBookings, type SavedBooking } from '@/lib/local-bookings'
 
 interface UseBookingsReturn {
-  bookings: DbBooking[]
+  bookings: SavedBooking[]
   loading: boolean
   error: string | null
   refetch: () => void
 }
 
+// Reads the bookings saved in this browser
 export function useBookings(): UseBookingsReturn {
-  const [bookings, setBookings] = useState<DbBooking[]>([])
+  const [bookings, setBookings] = useState<SavedBooking[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  const fetchBookings = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const res = await fetch('/api/bookings', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        // Revalidate frequently to show latest bookings
-        cache: 'no-store',
-      })
-
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error ?? 'Failed to load bookings')
-      }
-
-      const data = await res.json()
-      setBookings(data.bookings ?? [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
-    } finally {
-      setLoading(false)
-    }
+  const refetch = useCallback(() => {
+    setBookings(readBookings())
+    setLoading(false)
   }, [])
 
   useEffect(() => {
-    fetchBookings()
-  }, [fetchBookings])
+    refetch()
+  }, [refetch])
 
-  return { bookings, loading, error, refetch: fetchBookings }
+  return { bookings, loading, error: null, refetch }
 }
